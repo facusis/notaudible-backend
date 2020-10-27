@@ -6,5 +6,5 @@ const {initFirstUser} = require('./initFirstUser');
 initFirstUser(User);
 
 module.exports = {
-  user: User,
+  User: User,
 }

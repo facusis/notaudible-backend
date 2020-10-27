@@ -4,3 +4,4 @@ node_modules
 *.env
 *.lock
 .idea
+package-log.json

@@ -20,7 +20,6 @@ configSecurity(app);
 
 app.use('/data', buildDataRouter());
 
-
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
 })

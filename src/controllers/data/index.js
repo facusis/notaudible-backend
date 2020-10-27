@@ -1,9 +1,6 @@
 const {redactMiddleware} = require( "./dataCleanupOnReads");
-
 const {validationEntityMiddleware, validationEntityIdMiddleware} = require("./validation");
-
 const express = require('express')
-
 const models = require('../../mongo');
 
 
@@ -40,7 +37,7 @@ const buildRouter = () => {
   // CREATE
   router.post('/:entity', (req, res) => {
     const Entity = models[req.params.entity];
-    const newEntity = new Entity({name: req.body.name});
+    const newEntity = new Entity(req.body);
     return newEntity.save().then((result) => {
       res.send(result);
     }).catch((err) => {

@@ -21,6 +21,7 @@
     "express-jwt": "^6.0.0",
     "express-mung": "^0.5.1",
     "mongoose": "^5.10.9",
+    "nodemon": "^2.0.6",
     "password-hash": "^1.2.2"
   }
 }

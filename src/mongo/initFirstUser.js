@@ -6,7 +6,7 @@ const initFirstUser = (User) => {
     .then((count) => {
       if (count === 0) {
         console.log('No users found, going to create first user')
-        const admin = new User({ email: adminEmail, password: passwordHash.generate(adminPassword)});
+        const admin = new User({ email: adminEmail, password: adminPassword });
         admin.save();
       }
     })

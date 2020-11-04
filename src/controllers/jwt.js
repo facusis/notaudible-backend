@@ -10,9 +10,9 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-    }).unless({ path: ['/token', '/data/User'] })
+    }).unless({ path: ['/login','/register'] })
   );
-  app.post('/token', async (req, res) => {
+  app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const users = await data.User.find({email: email});
     if (users.length === 1 && passwordHash.verify(password, users[0].password)) {
@@ -22,6 +22,16 @@ const configSecurity = (app) => {
     } else {
       res.status(401).send({ message: 'Username or password incorrect' });
     }
+  });
+
+  app.post('/register', async (req, res) => {
+    const user = new data.User(req.body);
+    return user.save().then(() => {
+      const token = jwt.sign({id: user._id }, jwtSecret);
+      res.send({ token });
+    }).catch((err) => {
+      res.status(500).send({error: err})
+    });
   });
 }
 

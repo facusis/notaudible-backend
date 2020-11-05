@@ -14,7 +14,7 @@ const configSecurity = (app) => {
   );
   app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const users = await data.User.find({email: email});
+    const users = await data.user.find({email: email});
     if (users.length === 1 && passwordHash.verify(password, users[0].password)) {
       const user = users[0];
       const token = jwt.sign({ id: user._id }, jwtSecret);
@@ -25,7 +25,7 @@ const configSecurity = (app) => {
   });
 
   app.post('/register', async (req, res) => {
-    const user = new data.User(req.body);
+    const user = new data.user(req.body);
     return user.save().then(() => {
       const token = jwt.sign({id: user._id }, jwtSecret);
       res.send({ token });

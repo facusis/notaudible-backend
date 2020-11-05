@@ -7,7 +7,7 @@ const cors = require('cors')
 const buildDataRouter = require('./src/controllers/data').buildRouter;
 
 const app = express();
-const port = 3000;
+const port = 3001;
 app.use(require('easy-livereload')());
 app.use(cors({
   origin: '*',

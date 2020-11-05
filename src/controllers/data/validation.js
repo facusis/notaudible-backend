@@ -1,4 +1,6 @@
 const models = require('../../mongo');
+const {validationResult} = require('express-validator');
+
 
 const validationEntityMiddleware = (req, res, next) => {
   if (models[req.params.entity] === undefined) {
@@ -15,7 +17,18 @@ const validationEntityIdMiddleware = (req, res, next) => {
   }
 }
 
+const validationChecks = (req, res, next) => {
+  const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        let error = {}; errors.array().map((err) => error[err.param] = err.msg);
+        return res.status(500).json({error});
+    }
+
+    next();
+}
+
 module.exports = {
   validationEntityMiddleware,
   validationEntityIdMiddleware,
+  validationChecks
 }

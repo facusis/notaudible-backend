@@ -29,6 +29,7 @@ const configSecurity = (app) => {
     }
   });
 
+
   app.post('/register',
     [
       check('email').isEmail().withMessage('Introduzca una dirección de correo electrónico válida'),

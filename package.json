@@ -22,6 +22,7 @@
     "express-mung": "^0.5.1",
     "express-validator": "^6.6.1",
     "mongoose": "^5.10.9",
+    "nodemailer": "^6.4.15",
     "nodemon": "^2.0.6",
     "password-hash": "^1.2.2"
   }

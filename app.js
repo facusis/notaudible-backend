@@ -1,4 +1,5 @@
 const {configSecurity} = require("./src/controllers/jwt");
+const {userRouters} = require("./src/controllers/routers");
 require('dotenv').config();
 
 const express = require('express')
@@ -17,6 +18,7 @@ app.use(cors({
 app.use(bodyParser.json());
 
 configSecurity(app);
+userRouters(app);
 
 app.use('/data', buildDataRouter());
 

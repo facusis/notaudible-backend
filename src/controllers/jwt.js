@@ -14,9 +14,9 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-    }).unless({ path: ['/login', '/register'] })
+    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass'] })
   );
-
+  
   app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const users = await data.user.find({email});
@@ -48,6 +48,7 @@ const configSecurity = (app) => {
 
       res.status(409).send({ message: 'Email already exist' });
     });
+
 }
 
 module.exports = {

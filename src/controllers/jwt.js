@@ -14,6 +14,7 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
+
     }).unless({ path: ['/login', '/register'] })
   );
 
@@ -28,6 +29,7 @@ const configSecurity = (app) => {
       res.status(401).send({ message: 'Username or password incorrect' });
     }
   });
+
 
   app.post('/register',
     [

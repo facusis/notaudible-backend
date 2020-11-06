@@ -1,5 +1,5 @@
 const {redactMiddleware} = require( "./dataCleanupOnReads");
-const {validationEntityMiddleware, validationEntityIdMiddleware} = require("./validation");
+const {validationEntityMiddleware, validationEntityIdMiddleware, } = require("./validation");
 const express = require('express')
 const models = require('../../mongo');
 

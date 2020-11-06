@@ -14,10 +14,9 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-
-    }).unless({ path: ['/login', '/register'] })
+    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass'] })
   );
-
+  
   app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const users = await data.user.find({email});
@@ -26,16 +25,16 @@ const configSecurity = (app) => {
       const token = jwt.sign({ id: user._id }, jwtSecret);
       res.send({ token });
     } else {
-      res.status(401).send({ message: 'Username or password incorrect' });
+      res.status(401).send({ message: 'Mail o contraseña incorrecta' });
     }
   });
 
 
   app.post('/register',
     [
-      check('email').isEmail().withMessage('Enter a valid email addres'),
-      check('nickname').not().isEmpty().isLength({ min: 6 }).withMessage('Your nickname should have at least 6 characters'),
-      check('password').not().isEmpty().isLength({ min: 6 }).withMessage('your password should have at least 6 characters')
+      check('email').isEmail().withMessage('Introduzca una dirección de correo electrónico válida'),
+      check('nickname').not().isEmpty().isLength({ min: 6 }).withMessage('Tu Usuario debe contener almenos 6 caracteres'),
+      check('password').not().isEmpty().isLength({ min: 6 }).withMessage('Tu contraseña debe contener almenos 6 caracteres')
     ], validationChecks, async (req, res) => {
       const user = new data.user(req.body);
       const users = await data.user.find({ email: user.email });
@@ -48,8 +47,9 @@ const configSecurity = (app) => {
         });
       }
 
-      res.status(409).send({ message: 'Email already exist' });
+      res.status(409).send({ message: 'Email ya registrado' });
     });
+
 }
 
 module.exports = {

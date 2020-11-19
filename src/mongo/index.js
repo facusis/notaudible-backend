@@ -7,7 +7,7 @@ const Category = require('./schemas/Category');
 
 
 initFirstUser(User);
-
+//adios
 module.exports = {
   user: User,
   verifyPassCode: VerifyPassCode,

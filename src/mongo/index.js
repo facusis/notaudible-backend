@@ -7,6 +7,8 @@ const Category = require('./schemas/Category');
 
 
 initFirstUser(User);
+// hola
+console.log("Hola");
 
 module.exports = {
   user: User,

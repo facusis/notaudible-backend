@@ -6,6 +6,6 @@ const schema = new mongoose.Schema({
 
 });
 
-const Category = mongoose.model('Category', schema);
+const Upload = mongoose.model('Upload', schema);
 
-module.exports = Category;
+module.exports = Upload;

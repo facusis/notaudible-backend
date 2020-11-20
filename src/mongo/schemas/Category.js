@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-    title: String,
-    description: String,
-
+    name: String
 });
 
 const Category = mongoose.model('Category', schema);

@@ -3,6 +3,7 @@ const User = require('./schemas/User');
 const VerifyPassCode = require('./schemas/VerifyPassCode');
 const Book = require('./schemas/Book');
 const {initFirstUser} = require('./initFirstUser');
+const Category = require('./schemas/Category');
 
 
 initFirstUser(User);
@@ -10,5 +11,6 @@ initFirstUser(User);
 module.exports = {
   user: User,
   verifyPassCode: VerifyPassCode,
-  book: Book
+  book: Book,
+  category: Category
 }

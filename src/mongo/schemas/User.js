@@ -4,7 +4,8 @@ const passwordHash = require('password-hash');
 const schema = new mongoose.Schema({
   email: String,
   password: String,
-  nickname: String
+  nickname: String,
+  about: String
 });
 
 schema.pre('save', function() {

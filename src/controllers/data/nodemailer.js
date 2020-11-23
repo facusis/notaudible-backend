@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+/*const nodemailer = require("nodemailer");
 const credenciales = require('./credenciales');
 
 const sendMail = (code, email) => {
@@ -21,4 +21,4 @@ const sendMail = (code, email) => {
 
 module.exports = {
     sendMail,
-}
+}*/

@@ -2,7 +2,7 @@ const passwordHash = require('password-hash');
 const data = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
-const {sendMail} = require('./data/nodemailer');
+//const {sendMail} = require('./data/nodemailer');
 
 
 const userRouters = (app) => {
@@ -14,8 +14,8 @@ const userRouters = (app) => {
         let code = Math.round((Math.random()*9000) +1000);
         const verifyCode = new data.verifyPassCode({ email, verifypassCode: code })
         return verifyCode.save().then((result) => {
-          sendMail(code, email);
-          res.status(200).send({ message: 'se ha enviado un mail de verificacion'});
+          //sendMail(code, email);
+          res.status(200).send({ message: 'code'});
         }).catch((err) => {
           res.status(500).send({ error: err })
         });

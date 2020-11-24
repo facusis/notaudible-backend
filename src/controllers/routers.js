@@ -43,6 +43,34 @@ const userRouters = (app) => {
         res.status(401).send({ message: 'El Codigo de recuperacion es incorrecto' });
       }
     });
+
+    app.use('/upload', (req, res) => {
+
+      const book = new data.book({
+        title: req.body.title,
+        author: req.body.author,
+        category: req.body.category,
+        user: req.user.id
+      });
+
+      const user = req.user.id;
+
+      return book.save().then(result => {
+
+        data.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
+        .then((book) => {
+          res.status(200).send(result)
+        })
+
+        data.user.findByIdAndUpdate(user, { $push: { books: result._id } })
+        .then((result) => {
+          res.status(200).send(user)
+        })
+
+      }).catch((err) => {
+        res.status(500).send({ error: err })
+      });
+    });
 }
 
 module.exports = {

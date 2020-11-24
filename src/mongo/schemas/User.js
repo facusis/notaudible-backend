@@ -5,7 +5,13 @@ const schema = new mongoose.Schema({
   email: String,
   password: String,
   nickname: String,
-  about: String
+  about: String,
+  books: [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book'
+    }
+  ]
 });
 
 schema.pre('save', function() {

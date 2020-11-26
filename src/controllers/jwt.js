@@ -14,7 +14,7 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass'] })
+    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass', '/data/category'] })
   );
   
   app.post('/login', async (req, res) => {
@@ -23,7 +23,7 @@ const configSecurity = (app) => {
     if (users.length === 1 && passwordHash.verify(password, users[0].password)) {
       const user = users[0];
       const token = jwt.sign({ id: user._id }, jwtSecret);
-      res.send({ token });
+      res.send({ token, id: user._id });
     } else {
       res.status(401).send({ message: 'Mail o contraseña incorrecta' });
     }

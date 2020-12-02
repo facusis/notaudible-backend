@@ -3,6 +3,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const Grid = require('gridfs-stream');
 const { Readable } = require('stream');
+
 const models = require('../mongo');
 
 const trackRouter = () => {
@@ -72,9 +73,9 @@ const trackRouter = () => {
       writestream.on('error', function (error) {
         return res.status(500).json({ error });
       });
-
-      //FUNCION PARA SUBIR EL BOOK Y REFERENCIAR 
-      const uploadBookAndReference = () => {
+      
+      //Subir el libro y referenciar (file, usuario y categoria)
+      writestream.on('close', function () {
         const book = new models.book({
           title: req.body.title,
           author: req.body.author,
@@ -82,27 +83,18 @@ const trackRouter = () => {
           user: req.user.id,
           file: id
         });
-    
-        const user = req.user.id;
-    
+
         return book.save().then(result => {
-    
           models.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
-    
-          models.user.findByIdAndUpdate(user, { $push: { books: result._id } })
-    
-        }).catch((err) => {
+          models.user.findByIdAndUpdate(req.user.id, { $push: { books: result._id } })
+        }).then(
+          res.status(200).json({ message: "Your Book has been saved successfully" })
+        ).catch((err) => {
           res.status(500).send({ error: err })
         });
-      }
-
-      writestream.on('close', function () {
-        return (uploadBookAndReference(), res.status(200).json({message: 'File uploaded successfully', id}));
       });
-
     };
     
-
     upload.single('track')(req, res, callback);
 
   });

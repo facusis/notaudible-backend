@@ -1,21 +1,20 @@
-const passwordHash = require('password-hash');
-const data = require('../mongo');
+const express = require('express')
+const models = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
-//const {sendMail} = require('./data/nodemailer');
 
+const userRouter = () => {
+  let router = express.Router()
 
-const userRouters = (app) => {
-
-  app.post('/forgetpass', async (req, res) => {
+  router.post('/forgetpass', async (req, res) => {
     const { email } = req.body;
-    const user = await data.user.find({email});
+    const user = await models.user.find({email});
     if ( user.length > 0 ) {
       let code = Math.round((Math.random()*9000) +1000);
-      const verifyCode = new data.verifyPassCode({ email, verifypassCode: code })
+      const verifyCode = new models.verifyPassCode({ email, verifypassCode: code })
       return verifyCode.save().then((result) => {
         //sendMail(code, email);
-        res.status(200).send({ message: 'code'});
+        res.status(200).send({ message: code});
       }).catch((err) => {
         res.status(500).send({ error: err })
       });
@@ -24,17 +23,17 @@ const userRouters = (app) => {
     res.status(401).send({ message: 'Email incorrect' });
   });
 
-  app.use('/resetpass', [
+  router.use('/resetpass', [
     check('newPassword').not().isEmpty().isLength({ min: 6 }).withMessage('your password should have at least 6 characters')
   ], validationChecks, async (req, res) => {
     const { verifypassCode, newPassword, email } = req.body;
-    const passCode = await data.verifyPassCode.find({verifypassCode});
+    const passCode = await models.verifyPassCode.find({verifypassCode});
     if (passCode.length > 0 && passCode[0].email === email) {
       let password = passwordHash.generate(newPassword);
-      await data.user.findOneAndUpdate({ email: passCode[0].email }, { password } ).then((result) => {
+      await models.user.findOneAndUpdate({ email: passCode[0].email }, { password } ).then((result) => {
         if (result) {
           res.status(200).send({ message: 'La contraseña de ha cambiado correctamente' });
-          return data.verifyPassCode.findByIdAndDelete(passCode[0].id);
+          return models.verifyPassCode.findByIdAndDelete(passCode[0].id);
         }
       }).catch((err) => {
         res.status(500).send({ error: err })
@@ -44,9 +43,9 @@ const userRouters = (app) => {
     }
   });
 
-  app.use('/upload', (req, res) => {
+  router.use('/upload', (req, res) => {
 
-    const book = new data.book({
+    const book = new models.book({
       title: req.body.title,
       author: req.body.author,
       category: req.body.category,
@@ -57,12 +56,12 @@ const userRouters = (app) => {
 
     return book.save().then(result => {
 
-      data.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
+      models.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
       .then((book) => {
         res.status(200).send(book)
       })
 
-      data.user.findByIdAndUpdate(user, { $push: { books: result._id } })
+      models.user.findByIdAndUpdate(user, { $push: { books: result._id } })
       .then((result) => {
         res.status(200).send(result)
       })
@@ -71,8 +70,10 @@ const userRouters = (app) => {
       res.status(500).send({ error: err })
     });
   });
-}
+
+  return router;
+};
 
 module.exports = {
-    userRouters,
+    userRouter,
 }

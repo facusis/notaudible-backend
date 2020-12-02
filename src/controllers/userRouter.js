@@ -43,34 +43,6 @@ const userRouter = () => {
     }
   });
 
-  router.use('/upload', (req, res) => {
-
-    const book = new models.book({
-      title: req.body.title,
-      author: req.body.author,
-      category: req.body.category,
-      user: req.user.id
-    });
-
-    const user = req.user.id;
-
-    return book.save().then(result => {
-
-      models.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
-      .then((book) => {
-        res.status(200).send(book)
-      })
-
-      models.user.findByIdAndUpdate(user, { $push: { books: result._id } })
-      .then((result) => {
-        res.status(200).send(result)
-      })
-
-    }).catch((err) => {
-      res.status(500).send({ error: err })
-    });
-  });
-
   return router;
 };
 

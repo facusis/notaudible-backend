@@ -86,12 +86,12 @@ const trackRouter = () => {
 
         return book.save().then(result => {
           models.category.findByIdAndUpdate(req.body.category, { $push: { books: result._id } })
-          models.user.findByIdAndUpdate(req.user.id, { $push: { books: result._id } })
-        }).then(
-          res.status(200).json({ message: "Your Book has been saved successfully" })
-        ).catch((err) => {
-          res.status(500).send({ error: err })
-        });
+            .then(
+              res.status(200).json({ message: "Your Book has been saved successfully" })
+            ).catch((err) => {
+              res.status(500).send({ error: err })
+            });
+        })
       });
     };
     

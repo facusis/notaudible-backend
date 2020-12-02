@@ -6,12 +6,6 @@ const schema = new mongoose.Schema({
   password: String,
   nickname: String,
   about: String,
-  books: [
-    {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book'
-    }
-  ]
 });
 
 schema.pre('save', function() {

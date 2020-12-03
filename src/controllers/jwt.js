@@ -12,7 +12,6 @@ const configSecurity = (app) => {
 
   var unprotected = [
     /favicon.ico/,
-    /track/,
     /token/,
     /uploadTrack/,
     /login/,

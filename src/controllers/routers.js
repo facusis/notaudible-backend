@@ -50,7 +50,8 @@ const userRouters = (app) => {
         title: req.body.title,
         author: req.body.author,
         category: req.body.category,
-        user: req.user.id
+        user: req.user.id,
+
       });
 
       const user = req.user.id;
@@ -66,6 +67,8 @@ const userRouters = (app) => {
         .then((result) => {
           res.status(200).send(user)
         })
+
+// crear relacion del ID del archivo con este libro
 
       }).catch((err) => {
         res.status(500).send({ error: err })

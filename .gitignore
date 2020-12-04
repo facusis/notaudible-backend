@@ -3,7 +3,6 @@ node_modules
 *~
 *.env
 *.lock
-*rest.http
 .idea
 package-log.json
 credenciales.js

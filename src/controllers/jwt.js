@@ -14,7 +14,7 @@ const configSecurity = (app) => {
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass', '/data/category', '/books'] })
+    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass', '/data/category'] })
   );
   
   app.post('/login', async (req, res) => {

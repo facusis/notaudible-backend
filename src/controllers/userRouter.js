@@ -2,6 +2,7 @@ const express = require('express')
 const models = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
+const passwordHash = require('password-hash');
 
 const userRouter = () => {
   let router = express.Router()
@@ -39,7 +40,7 @@ const userRouter = () => {
         res.status(500).send({ error: err })
       });
     } else {
-      res.status(401).send({ message: 'El Codigo de recuperacion es incorrecto' });
+      res.status(401).send({ message: 'Something did not turn out as you expected' });
     }
   });
 

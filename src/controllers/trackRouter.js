@@ -80,7 +80,7 @@ const trackRouter = () => {
           title: req.body.title,
           author: req.body.author,
           category: req.body.category,
-          user: req.user.id,
+          // user: req.user.id,
           file: id
         });
 

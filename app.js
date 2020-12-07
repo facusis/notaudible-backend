@@ -1,11 +1,13 @@
 const {configSecurity} = require("./src/controllers/jwt");
 const {userRouters} = require("./src/controllers/routers");
 require('dotenv').config();
+const morgan = require('morgan');
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const buildDataRouter = require('./src/controllers/data').buildRouter;
+const trackRouter = require('./src/controllers/fileUplod').router;
 
 const app = express();
 const port = 3001;
@@ -16,11 +18,13 @@ app.use(cors({
 }))
 
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 configSecurity(app);
 userRouters(app);
 
 app.use('/data', buildDataRouter());
+app.use('/track', trackRouter);
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)

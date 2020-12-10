@@ -67,6 +67,9 @@ const buildRouter = () => {
       res.status(500).send({error: err})
     });
   });
+
+
+
   return router;
 };
 

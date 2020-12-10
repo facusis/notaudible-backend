@@ -10,11 +10,22 @@ const {check} = require('express-validator');
 
 const configSecurity = (app) => {
 
+  var unprotected = [
+    /favicon.ico/,
+    /token/,
+    /uploadTrack/,
+    /login/,
+    /register/,
+    /forgetpass/,
+    /resetpass/,
+    /\/data\/category/,
+  ];
+
   app.use(
     jwtMiddleware({
       secret: jwtSecret,
       algorithms: ['HS256']
-    }).unless({ path: ['/login', '/register', '/forgetpass', '/resetpass', '/data/category'] })
+    }).unless({ path: unprotected })
   );
   
   app.post('/login', async (req, res) => {

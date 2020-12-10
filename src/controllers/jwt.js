@@ -36,6 +36,7 @@ const configSecurity = (app) => {
       check('nickname').not().isEmpty().isLength({ min: 6 }).withMessage('Tu Usuario debe contener almenos 6 caracteres'),
       check('password').not().isEmpty().isLength({ min: 6 }).withMessage('Tu contraseña debe contener almenos 6 caracteres')
     ], validationChecks, async (req, res) => {
+      console.log('User created');
       const user = new data.user(req.body);
       const users = await data.user.find({ email: user.email });
       if (users.length == 0) {

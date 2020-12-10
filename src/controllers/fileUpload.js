@@ -54,6 +54,7 @@ router.post('/', (req, res) => {
       return res.status(400).json({message: 'Track name required'});
     }
     let trackName = req.body.name;
+    console.log(trackName);
     const readableTrackStream = new Readable();
     readableTrackStream.push(req.file.buffer);
     readableTrackStream.push(null);

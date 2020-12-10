@@ -7,7 +7,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const buildDataRouter = require('./src/controllers/data').buildRouter;
-const trackRouter = require('./src/controllers/fileUplod').router;
+const trackRouter = require('./src/controllers/fileUpload').router;
 
 const app = express();
 const port = 3001;

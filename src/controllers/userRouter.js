@@ -3,6 +3,7 @@ const models = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
 const passwordHash = require('password-hash');
+const { model } = require('../mongo/schemas/Book');
 
 const userRouter = () => {
   let router = express.Router()
@@ -53,6 +54,21 @@ const userRouter = () => {
     }).catch((err) => {
         res.status(500).send({ error: err})
       })
+  });
+
+  router.post('/comment', async (req, res) => {
+    const { comment, user, book } = req.body;
+    const newComment = new models.comments({
+      comment,
+      userId,
+      bookId,
+     date: new Date()})
+    
+    return newComment.save().then((result) => {
+      res.status(200).send({ message: code});
+    }).catch((err) => {
+      res.status(500).send({ error: err })
+    });
   });
   return router;
 };

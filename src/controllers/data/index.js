@@ -36,6 +36,7 @@ const buildRouter = () => {
   });
   // CREATE
   router.post('/:entity', (req, res) => {
+    console.log(req);
     const Entity = models[req.params.entity];
     const newEntity = new Entity(req.body);
     return newEntity.save().then((result) => {

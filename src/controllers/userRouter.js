@@ -56,13 +56,26 @@ const userRouter = () => {
       })
   });
 
-  router.post('/comment', async (req, res) => {
-    const { comment, user, book } = req.body;
+  router.use('/getbook/:id', async (req, res) => {
+    return models.book.findById(req.params.id)
+      .populate('category', 'name')
+      .populate('user', 'nickname')
+    .then(book => {
+      res.send(book);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+
+
+  router.post('/comments', async (req, res) => {
+
     const newComment = new models.comments({
       comment,
       userId,
       bookId,
-     date: new Date()})
+      creationDate: new Date()})
     
     return newComment.save().then((result) => {
       res.status(200).send({ message: code});

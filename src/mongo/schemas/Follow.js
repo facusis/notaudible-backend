@@ -10,6 +10,6 @@ schema.pre('save', function() {
   this.password = passwordHash.generate(this.password)
 });
 
-const User = mongoose.model('Follow', schema);
+const Follow = mongoose.model('Follow', schema);
 
-module.exports = User;
+module.exports = Follow;

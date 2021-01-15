@@ -3,7 +3,7 @@ const models = require("../mongo");
 const { validationChecks } = require("./data/validation");
 const { check } = require("express-validator");
 const passwordHash = require("password-hash");
-const User = require("../mongo/schemas/Follow");
+const Follow = require("../mongo/schemas/Follow");
 
 const userRouter = () => {
   let router = express.Router();
@@ -69,8 +69,8 @@ const userRouter = () => {
     }
   );
 
-  router.put("/follow", (req, res) => {
-    User.findByIdAndUpdate(
+  router.post("/follow", (req, res) => {
+    const user = Follow.findById(
       req.body.followId,
       {
         $push: { follower: req.user._id },
@@ -84,7 +84,7 @@ const userRouter = () => {
             error: err,
           });
         }
-        User.findByIdAndUpdate(
+        Follow.findById(
           req.user._id,
           {
             $push: { following: req.body.followId },
@@ -101,8 +101,8 @@ const userRouter = () => {
     );
   });
 
-  router.put("/unfollow", (req, res) => {
-    User.findByIdAndUpdate(
+  router.post("/unfollow", (req, res) => {
+    Follow.findById(
       req.body.followId,
       {
         $pull: { follower: req.user._id },
@@ -116,7 +116,7 @@ const userRouter = () => {
             error: err,
           });
         }
-        User.findByIdAndUpdate(
+        Follow.findById(
           req.user._id,
           {
             $pull: { following: req.body.followId },

@@ -3,6 +3,7 @@ const models = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
 const passwordHash = require('password-hash');
+const { model } = require('../mongo/schemas/Book');
 
 const userRouter = () => {
   let router = express.Router()
@@ -44,6 +45,44 @@ const userRouter = () => {
     }
   });
 
+  router.use('/getbook/:id', async (req, res) => {
+    return models.book.findById(req.params.id)
+      .populate('category', 'name')
+      .populate('user', 'nickname')
+    .then(book => {
+      res.send(book);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+  router.use('/getbook/:id', async (req, res) => {
+    return models.book.findById(req.params.id)
+      .populate('category', 'name')
+      .populate('user', 'nickname')
+    .then(book => {
+      res.send(book);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+
+
+  router.post('/comments', async (req, res) => {
+
+    const newComment = new models.comments({
+      comment,
+      userId,
+      bookId,
+      creationDate: new Date()})
+    
+    return newComment.save().then((result) => {
+      res.status(200).send({ message: code});
+    }).catch((err) => {
+      res.status(500).send({ error: err })
+    });
+  });
   return router;
 };
 

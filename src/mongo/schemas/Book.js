@@ -6,7 +6,8 @@ const schema = new mongoose.Schema({
   sinopsis: String,
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  file: { type: mongoose.Schema.Types.ObjectId, ref: 'fs.files' }
+  file: { type: mongoose.Schema.Types.ObjectId, ref: 'fs.files' },
+  urlimage: String,
 });
 
 const Book = mongoose.model('Book', schema);

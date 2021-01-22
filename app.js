@@ -10,7 +10,7 @@ const userRouter = require('./src/controllers/userRouter').userRouter;
 const trackRouter = require('./src/controllers/trackRouter').trackRouter;
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT;
 app.use(cors({
   origin: '*',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204

@@ -11,7 +11,6 @@ const trackRouter = require('./src/controllers/trackRouter').trackRouter;
 
 const app = express();
 const port = 3001;
-app.use(require('easy-livereload')());
 app.use(cors({
   origin: '*',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204

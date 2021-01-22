@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-
   "scripts": {
     "start": "node app.js",
     "start-dev": "NODE_ENV=development node-dev app.js",

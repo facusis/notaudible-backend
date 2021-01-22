@@ -17,4 +17,7 @@ if (databaseURL) {
 		mongoose.connect(`mongodb://${databaseHost}:${databasePort}/${databaseName}?authSource=admin`, {useNewUrlParser: true, useUnifiedTopology: true});
 	}
 }
+const db = mongoose.connection;
 
+db.on("error", (error) => console.log(error));
+db.on("open", () => console.log("connected to database"));

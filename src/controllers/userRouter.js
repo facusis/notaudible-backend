@@ -56,18 +56,6 @@ const userRouter = () => {
       })
   });
 
-  router.use('/getbook/:id', async (req, res) => {
-    return models.book.findById(req.params.id)
-      .populate('category', 'name')
-      .populate('user', 'nickname')
-    .then(book => {
-      res.send(book);
-    }).catch((err) => {
-        res.status(500).send({ error: err})
-      })
-  });
-
-
 
   router.post('/comments', async (req, res) => {
 
@@ -83,6 +71,40 @@ const userRouter = () => {
       res.status(500).send({ error: err })
     });
   });
+
+ //NUEVOS MIOS
+
+  router.post('/favourite', async (req, res) => {
+    const bookId = req.body.bookId;
+    const userId = req.body.userId;
+    const newFavourite = new models.favourite({
+      userId,
+      bookId})
+    
+    return newFavourite.save().then((result) => {
+      res.status(200).send({ result});
+    }).catch((err) => {
+      res.status(500).send({ error: err })
+    });
+  });
+
+  router.post('/favouritesearch', async (req, res) => {
+    const bookId = req.body.bookId;
+    const userId = req.body.userId;
+
+    return models.favourite.find({bookId, userId})
+    .then(favourite => {
+      if (favourite && favourite.length > 0) {
+        return res.send(favourite);
+      }
+      return res.send(false);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+
+
   return router;
 };
 

@@ -103,6 +103,18 @@ const userRouter = () => {
       })
   });
 
+  router.post('/favouritesbyUser', async (req, res) => {
+    const userId = req.body.userId;
+
+    return models.favourite.find(userId)
+    .populate('bookId')
+    .then(favouritesbyId => {
+      res.send(favouritesbyId);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
 
 
   return router;

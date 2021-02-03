@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const buildDataRouter = require('./src/controllers/data').buildRouter;
-const userRouter = require('./src/controllers/userRouter').userRouter;
+const userRouter = require('./src/controllers/userRouter');
 const trackRouter = require('./src/controllers/trackRouter').trackRouter;
 
 const app = express();

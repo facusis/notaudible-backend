@@ -59,6 +59,7 @@ const buildRouter = () => {
         res.status(500).send({error: err})
       });
   });
+  
   //DELETE
   router.delete('/:entity/:id', (req, res) => {
     const Entity = models[req.params.entity];

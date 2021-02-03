@@ -3,7 +3,8 @@ const models = require("../mongo");
 const { validationChecks } = require("./data/validation");
 const { check } = require("express-validator");
 const passwordHash = require("password-hash");
-const Follow = require("../mongo/schemas/Follow");
+const { model } = require("mongoose");
+
 
 const userRouter = () => {
   let router = express.Router();
@@ -17,7 +18,7 @@ const userRouter = () => {
         email,
         verifypassCode: code,
       });
-      return verifyCode
+       verifyCode
         .save()
         .then((result) => {
           //sendMail(code, email);
@@ -55,7 +56,7 @@ const userRouter = () => {
                 .send({
                   message: "La contraseña de ha cambiado correctamente",
                 });
-              return models.verifyPassCode.findByIdAndDelete(passCode[0].id);
+               models.verifyPassCode.findByIdAndDelete(passCode[0].id);
             }
           })
           .catch((err) => {
@@ -69,92 +70,110 @@ const userRouter = () => {
     }
   );
 
+  router.use('/getbook/:id', async (req, res) => {
+     models.book.findById(req.params.id)
+      .populate('category', 'name')
+      .populate('user', 'nickname')
+    .then(book => {
+      res.send(book);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+
+  // follow a user
   router.post("/follow", (req, res) => {
-    const user = Follow.findById(
-      req.body.followId,
-      {
-        $push: { follower: req.user._id },
-      },
-      {
-        new: true,
-      },
-      (err, result) => {
-        if (err) {
-          return res.status(422).json({
-            error: err,
-          });
-        }
-        Follow.findById(
-          req.user._id,
-          {
-            $push: { following: req.body.followId },
-          },
-          { new: true }
-        )
-          .then((result) => {
-            res.json(result);
-          })
-          .catch((err) => {
-            return res.status(422).json({ error: err });
-          });
-      }
-    );
-  });
 
-  router.post("/unfollow", (req, res) => {
-    Follow.findById(
-      req.body.followId,
-      {
-        $pull: { follower: req.user._id },
-      },
-      {
-        new: true,
-      },
-      (err, result) => {
-        if (err) {
-          return res.status(422).json({
-            error: err,
-          });
-        }
-        Follow.findById(
-          req.user._id,
-          {
-            $pull: { following: req.body.followId },
-          },
-          { new: true }
-        )
-          .then((result) => {
-            res.json(result);
-          })
-          .catch((err) => {
-            return res.status(422).json({ error: err });
-          });
-      }
-    );
-  });
+    const follower = req.body.follower;
+    const following = req.body.following;
 
-  router.use('/getbook/:id', async (req, res) => {
-    return models.book.findById(req.params.id)
-      .populate('category', 'name')
-      .populate('user', 'nickname')
-    .then(book => {
-      res.send(book);
+    const newFollowObject = new models.follow({follower, following});
+
+     newFollowObject.save().then((result) => {
+      res.send(result);
     }).catch((err) => {
-        res.status(500).send({ error: err})
-      })
+      res.status(500).send({error: err})
+    });
   });
+  // unfollow a user
+  router.post("/follow", (req, res) => {
+    const follower = req.body.follower;
+    const following = req.body.following;
 
-  router.use('/getbook/:id', async (req, res) => {
-    return models.book.findById(req.params.id)
-      .populate('category', 'name')
-      .populate('user', 'nickname')
-    .then(book => {
-      res.send(book);
+     models.follow.findAndDelete({follower, following}).then(() => {
+      res.status(204).send();
     }).catch((err) => {
-        res.status(500).send({ error: err})
-      })
+      res.status(500).send({error: err})
+    });
   });
 
+  // get my followings
+  router.get('/my-followings', (req, res) => {
+    const follower = req.body.follower;
+
+     models.follow.find({follower}).then((result) => {
+        if (result) {
+          res.status(200).send(result);
+        } else {
+          res.status(404).send();
+        }
+      }).catch((err) => {
+        res.status(500).send({error: err})
+      })
+    });
+
+    // get my followers
+    router.get('/my-followers', (req, res) => {
+      const userId = req.body.userId;
+  
+       models.follow.find({following: userId}).then((result) => {
+          if (result) {
+            res.status(200).send(result);
+          } else {
+            res.status(404).send();
+          }
+        }).catch((err) => {
+          res.status(500).send({error: err})
+        })
+      });
+  
+  // get my followings
+  router.get('/followings', (req, res) => {
+    const following = req.body.following;
+
+     models.follow.find({following}).then((result) => {
+        if (result) {
+          res.status(200).send(result);
+        } else {
+          res.status(404).send();
+        }
+      }).catch((err) => {
+        res.status(500).send({error: err})
+      })
+    });
+
+
+  // get all users 
+  router.get('/', (req, res) => {
+    models.user.find({}, (err, users) =>{
+      res.send(users);
+    });
+  })
+
+  // get a user by id
+  router.get('/:id', (req, res) => {
+    const id = req.params.id;
+     models.user.findById(id).then((result) => {
+      if (result) {
+        res.status(200).send(result);
+      } else {
+        res.status(404).send();
+      }
+    }).catch((err) => {
+      res.status(500).send({error: err})
+    });
+  })
 
 
   router.post('/comments', async (req, res) => {
@@ -165,7 +184,7 @@ const userRouter = () => {
       bookId,
       creationDate: new Date()})
     
-    return newComment.save().then((result) => {
+      newComment.save().then((result) => {
       res.status(200).send({ message: code});
     }).catch((err) => {
       res.status(500).send({ error: err })
@@ -174,6 +193,4 @@ const userRouter = () => {
   return router;
 };
 
-module.exports = {
-  userRouter,
-};
+module.exports = userRouter;

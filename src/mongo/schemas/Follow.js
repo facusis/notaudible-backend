@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
-const passwordHash = require('password-hash');
-
-const schema = new mongoose.Schema({
-  follower: {type: mongoose.Schema.ObjectId, ref: 'User'},
-  followed: {type: mongoose.Schema.ObjectId, ref: 'User'}
-});
-
-schema.pre('save', function() {
-  this.password = passwordHash.generate(this.password)
-});
-
-const Follow = mongoose.model('Follow', schema);
-
-module.exports = Follow;
+const Schema = mongoose.Schema;
+ 
+const FollowSchema = new Schema({
+  follower: {
+    type: Schema.Types.ObjectId,
+    ref: 'User' 
+  },
+  following: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
+},
+);
+ 
+module.exports = mongoose.model('Follow', FollowSchema);

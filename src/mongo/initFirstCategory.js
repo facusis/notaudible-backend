@@ -6,7 +6,7 @@ const initCategory = (Category) => {
 
     const data = [
         {
-            name: "Misterior y Suspense"
+            name: "Misterios y Suspense"
         },
         {
             name: "Ciencia Ficción"

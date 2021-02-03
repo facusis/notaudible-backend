@@ -19,6 +19,7 @@ const configSecurity = (app) => {
     /forgetpass/,
     /resetpass/,
     /\/data\/category/,
+    /\/track*/,
   ];
 
   app.use(

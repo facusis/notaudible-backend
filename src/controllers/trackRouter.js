@@ -40,10 +40,10 @@ const trackRouter = () => {
     const upload = multer({
       storage,
       limits: {
-        fields: 4, //Parametros extra que le pasaremos (el name)
+        fields: 7, //Parametros extra que le pasaremos (el name)
         fileSize: 8000000, //Tamano maximo del file
         files: 1, //numero de archivos a subir
-        parts: 5 // Dos tipos de campos (el track y el name)
+        parts: 8 // Dos tipos de campos (el track y el name)
       }
     });
 
@@ -80,8 +80,10 @@ const trackRouter = () => {
           title: req.body.title,
           author: req.body.author,
           category: req.body.category,
-          user: req.user.id,
-          file: id
+          user: req.body.user,
+          file: id,
+          sinopsis: req.body.sinopsis,
+          urlimage: req.body.urlimage,
         });
 
         return book.save().then(result => {

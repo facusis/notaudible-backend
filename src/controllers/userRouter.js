@@ -116,6 +116,30 @@ const userRouter = () => {
   });
 
 
+  //router que no funciona, funcion select para quitar el file en el envío
+  // router.post('/library', async (res) => {
+  //   return models.book.find({})
+  //   .select('-file')
+  //   .then(lib => {
+  //     res.send(lib);
+  //   }).catch((err) => {
+  //       res.status(500).send({ error: err})
+  //     })
+  // });
+
+  router.post('/booksbycategory', async (req, res) => {
+     const category = req.body.category;
+     
+    return models.book.find({category})
+    .populate('bookId')
+    .then(booksbycategory => {
+      res.send(booksbycategory);
+    }).catch((err) => {
+        res.status(500).send({ error: err})
+      })
+  });
+
+
 
   return router;
 };

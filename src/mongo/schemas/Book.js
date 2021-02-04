@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
-  title: String,
+  title: {
+        type: String,
+        index: true
+      },
   author: String,
   sinopsis: String,
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category'},

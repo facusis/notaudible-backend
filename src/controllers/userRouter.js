@@ -3,7 +3,7 @@ const models = require('../mongo');
 const {validationChecks} = require('./data/validation');
 const {check} = require('express-validator');
 const passwordHash = require('password-hash');
-const { model } = require('../mongo/schemas/Book');
+const { book } = require('../mongo');
 
 const userRouter = () => {
   let router = express.Router()
@@ -34,7 +34,7 @@ const userRouter = () => {
       let password = passwordHash.generate(newPassword);
       await models.user.findOneAndUpdate({ email: passCode[0].email }, { password } ).then((result) => {
         if (result) {
-          res.status(200).send({ message: 'La contraseña de ha cambiado correctamente' });
+          res.status(200).send({ message: 'La contraseña se ha cambiado correctamente' });
           return models.verifyPassCode.findByIdAndDelete(passCode[0].id);
         }
       }).catch((err) => {
@@ -138,6 +138,19 @@ const userRouter = () => {
         res.status(500).send({ error: err})
       })
   });
+
+  router.use('/searchbook/:namesearch', async (req, res) => {
+    const namesearch = req.params.namesearch;
+      console.log(req.params.namesearch)
+      return book.find({"title": {"$regex": namesearch, "$options": "i"}})
+      
+        .then(result => {
+              res.status(200).send(result)
+        }).catch((err) => {
+          res.status(500).send({ error: err})
+        })
+  });
+
 
 
 

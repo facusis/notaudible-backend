@@ -152,6 +152,85 @@ const userRouter = () => {
   });
 
 
+  //follows de Zhiting
+
+  router.post("/follow", (req, res) => {
+
+    const follower = req.body.follower;
+    const following = req.body.following;
+
+    const newFollowObject = new models.follow({follower, following});
+
+     newFollowObject.save().then((result) => {
+      res.send(result);
+    }).catch((err) => {
+      res.status(500).send({error: err})
+    });
+  });
+  // unfollow a user
+  router.post("/follow", (req, res) => {
+    const follower = req.body.follower;
+    const following = req.body.following;
+
+     models.follow.findAndDelete({follower, following}).then(() => {
+      res.status(204).send();
+    }).catch((err) => {
+      res.status(500).send({error: err})
+    });
+  });
+
+    // get my followings
+    router.get('/my-followings', (req, res) => {
+      const follower = req.body.follower;
+  
+       models.follow.find({follower}).then((result) => {
+          if (result) {
+            res.status(200).send(result);
+          } else {
+            res.status(404).send();
+          }
+        }).catch((err) => {
+          res.status(500).send({error: err})
+        })
+      });
+  
+      // get my followers
+      router.get('/my-followers', (req, res) => {
+        const userId = req.body.userId;
+  
+         models.follow.find({following: userId}).then((result) => {
+            if (result) {
+              res.status(200).send(result);
+            } else {
+              res.status(404).send();
+            }
+          }).catch((err) => {
+            res.status(500).send({error: err})
+          })
+        });
+  
+    // get my followings
+    router.get('/followings', (req, res) => {
+      const following = req.body.following;
+  
+       models.follow.find({following}).then((result) => {
+          if (result) {
+            res.status(200).send(result);
+          } else {
+            res.status(404).send();
+          }
+        }).catch((err) => {
+          res.status(500).send({error: err})
+        })
+      });
+  
+  
+    // get all users 
+    router.get('/', (req, res) => {
+      models.user.find({}, (err, users) =>{
+        res.send(users);
+      });
+    })
 
 
   return router;
